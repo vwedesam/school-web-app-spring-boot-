@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.vwedesam</groupId>
-	<artifactId>example_19</artifactId>
+	<artifactId>easyschool_1_0</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>example_19</name>
+	<name>easyschool_1_0</name>
 	<description>Eazy School Web Application</description>
 	<properties>
 		<java.version>11</java.version>
