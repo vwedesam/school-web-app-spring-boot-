@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.vwedesam</groupId>
-	<artifactId>example_23</artifactId>
+	<artifactId>easyschool_1_0</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>example_23</name>
+	<name>easyschool_1_0</name>
 	<description>Eazy School Web Application</description>
 	<properties>
 		<java.version>11</java.version>
@@ -40,6 +40,10 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.26</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 		<dependency>
