@@ -16,8 +16,11 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
         http
 //                .csrf().ignoringAntMatchers("/saveMsg")
 //                .and()
+                .csrf().ignoringAntMatchers("/h2-console/**")
+                .and()
                 .authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
+                .mvcMatchers("/displayMessages").hasRole("ADMIN")
                 .mvcMatchers("/home").permitAll()
                 .mvcMatchers ("/holidays/**").permitAll()
                 .mvcMatchers("/contact").permitAll()
@@ -34,14 +37,20 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
-                .and().httpBasic();
+//                .and()
+//                .authorizeRequests().antMatchers("/h2-console/**").permitAll()
+                .and()
+                .httpBasic();
+
+        // for h2-console that is embeded using iframe
+        http.headers().frameOptions().disable();
 
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password("0000").roles("USER", "ADMIN")
+                .withUser("admin").password("0000").roles("ADMIN")
                 .and()
                 .withUser("user").password("1234").roles("USER")
                 .and()

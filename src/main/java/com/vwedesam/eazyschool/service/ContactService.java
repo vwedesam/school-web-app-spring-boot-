@@ -1,21 +1,24 @@
 package com.vwedesam.eazyschool.service;
 
+import com.vwedesam.eazyschool.EazySchoolApplication;
+import com.vwedesam.eazyschool.constants.EazySchoolConstants;
 import com.vwedesam.eazyschool.model.Contact;
+import com.vwedesam.eazyschool.repository.ContactRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.ApplicationScope;
-import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.annotation.SessionScope;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
-//@RequestScope
-//@SessionScope
-//@ApplicationScope
 public class ContactService {
 
-    private int counter = 0;
     private static Logger log = LoggerFactory.getLogger(ContactService.class);
+
+    @Autowired
+    private ContactRepository contactRepository;
 
     public ContactService(){
         System.out.println("Contact Service Bean initialized");
@@ -27,18 +30,38 @@ public class ContactService {
      * @return
      */
     public boolean saveMessageDetails(Contact contact){
-        boolean isSaved = true;
-        // TODO - Need to persist the data into the DB table
-        log.info(contact.toString());
+        boolean isSaved = false;
+
+        contact.setStatus(EazySchoolConstants.OPEN);
+        contact.setCreatedBy(EazySchoolConstants.ANONYMOUS);
+        contact.setCreatedAt(LocalDateTime.now());
+
+        int result = contactRepository.saveContactMsg(contact);
+
+        if(result > 0){
+            isSaved = true;
+        }
+
         return isSaved;
     }
 
-    public int getCounter(){
-        return counter;
+    public List<Contact> findMsgsWithStatus(){
+
+       List<Contact> contactMsgs = contactRepository.findMsgsWithStatus(EazySchoolConstants.OPEN);
+
+       return contactMsgs;
+
     }
 
-    public void setCounter(int counter){
-        this.counter = counter;
+    public boolean updateMsgStatus(int contactId, String updatedBy){
+        boolean isUpdated = false;
+
+        int result = contactRepository.updateMsgStatus(contactId, EazySchoolConstants.CLOSE, updatedBy);
+        if(result >  0){
+            isUpdated = true;
+        }
+
+        return isUpdated;
     }
 
 }
