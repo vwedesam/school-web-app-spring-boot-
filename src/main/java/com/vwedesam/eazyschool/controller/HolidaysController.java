@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class HolidaysController {
@@ -28,15 +29,19 @@ public class HolidaysController {
         model.addAttribute("festival", festival);
         model.addAttribute("federal", federal);
 
-        List<Holiday> holidays = holidaysRepository.findAllHolidays();
+        Iterable<Holiday> holidays = holidaysRepository.findAll();
         log.info(holidays.toString());
 
         Holiday.Type[] types = Holiday.Type.values();
 
+        // convert Iterable to lists
+        List<Holiday> holidayList = StreamSupport.stream(holidays.spliterator(), false)
+                                        .collect (Collectors.toList());
+
         for (Holiday.Type type : types) {
             // see java 8,9,11 new features
             model.addAttribute (type.toString(),
-                    (holidays.stream().filter (holiday -> holiday.getType().equals (type)).
+                    (holidayList.stream().filter (holiday -> holiday.getType().equals (type)).
                             collect (Collectors.toList())));
         }
 
@@ -58,15 +63,18 @@ public class HolidaysController {
             model.addAttribute(String.valueOf(display), true);
         }
 
-        List<Holiday> holidays = holidaysRepository.findAllHolidays();
+        Iterable<Holiday> holidays = holidaysRepository.findAll();
 
         log.info(holidays.toString());
 
         Holiday.Type[] types = Holiday.Type.values();
 
+        List<Holiday> holidayList = StreamSupport.stream(holidays.spliterator(), false)
+                .collect (Collectors.toList());
+
         for (Holiday.Type type : types) {
             model.addAttribute (type.toString(),
-                    (holidays.stream().filter (holiday -> holiday.getType().equals (type)).
+                    (holidayList.stream().filter (holiday -> holiday.getType().equals (type)).
                             collect (Collectors.toList())));
         }
 

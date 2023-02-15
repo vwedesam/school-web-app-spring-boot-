@@ -63,7 +63,7 @@ public class ContactController {
 
     @RequestMapping("/closeMsg")
     public String updateMsgStatus(@RequestParam int id, Authentication authentication){
-        contactService.updateMsgStatus(id, authentication.getName());
+        contactService.updateMsgStatus(id);
         return "redirect:/displayMessages";
     }
 

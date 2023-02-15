@@ -14,10 +14,6 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
 
         http
-//                .csrf().ignoringAntMatchers("/saveMsg")
-//                .and()
-                .csrf().ignoringAntMatchers("/h2-console/**")
-                .and()
                 .authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
                 .mvcMatchers("/displayMessages").hasRole("ADMIN")
@@ -37,13 +33,8 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
-//                .and()
-//                .authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and()
                 .httpBasic();
-
-        // for h2-console that is embeded using iframe
-        http.headers().frameOptions().disable();
 
     }
 

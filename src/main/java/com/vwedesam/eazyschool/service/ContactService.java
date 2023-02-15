@@ -1,6 +1,5 @@
 package com.vwedesam.eazyschool.service;
 
-import com.vwedesam.eazyschool.EazySchoolApplication;
 import com.vwedesam.eazyschool.constants.EazySchoolConstants;
 import com.vwedesam.eazyschool.model.Contact;
 import com.vwedesam.eazyschool.repository.ContactRepository;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContactService {
@@ -33,12 +33,13 @@ public class ContactService {
         boolean isSaved = false;
 
         contact.setStatus(EazySchoolConstants.OPEN);
-        contact.setCreatedBy(EazySchoolConstants.ANONYMOUS);
-        contact.setCreatedAt(LocalDateTime.now());
+//        contact.setCreatedBy(EazySchoolConstants.ANONYMOUS);
+//        contact.setCreatedAt(LocalDateTime.now());
+        // allow jpa auditing manage these fields
 
-        int result = contactRepository.saveContactMsg(contact);
+        Contact savedContact = contactRepository.save(contact);
 
-        if(result > 0){
+        if(null != savedContact && savedContact.getContactId() > 0){
             isSaved = true;
         }
 
@@ -47,17 +48,25 @@ public class ContactService {
 
     public List<Contact> findMsgsWithStatus(){
 
-       List<Contact> contactMsgs = contactRepository.findMsgsWithStatus(EazySchoolConstants.OPEN);
+       List<Contact> contactMsgs = contactRepository.findByStatus(EazySchoolConstants.OPEN);
 
        return contactMsgs;
 
     }
 
-    public boolean updateMsgStatus(int contactId, String updatedBy){
+    public boolean updateMsgStatus(int contactId){
         boolean isUpdated = false;
+        Optional<Contact> contact = contactRepository.findById(contactId);
 
-        int result = contactRepository.updateMsgStatus(contactId, EazySchoolConstants.CLOSE, updatedBy);
-        if(result >  0){
+        contact.ifPresent(contact1 -> {
+            contact1.setStatus(EazySchoolConstants.CLOSE);
+//            contact1.setUpdatedBy(updatedBy);
+//            contact1.setUpdatedAt(LocalDateTime.now());
+            // allow jpa auditing manage these fields
+        });
+
+        Contact updatedContact = contactRepository.save(contact.get());
+        if(null != updatedContact && updatedContact.getUpdatedBy() != null){
             isUpdated = true;
         }
 
