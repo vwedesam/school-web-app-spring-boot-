@@ -47,6 +47,7 @@ public class Person extends BaseEntity {
     @NotBlank(message="Confirm Email must not be blank")
     @Email(message = "Please provide a valid confirm email address" )
     @Transient
+//    @Column(nullable = true)
     private String confirmEmail;
 
     @NotBlank(message="Password must not be blank")
@@ -57,6 +58,7 @@ public class Person extends BaseEntity {
     @NotBlank(message="Confirm Password must not be blank")
     @Size(min=5, message="Confirm Password must be at least 5 characters long")
     @Transient
+//    @Column(nullable = true)
     private String confirmPwd;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, targetEntity = Roles.class)
@@ -64,7 +66,7 @@ public class Person extends BaseEntity {
     private Roles roles;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Address.class)
-    @JoinColumn (name = "address_id", referencedColumnName = "addressId", nullable = false)
+    @JoinColumn (name = "address_id", referencedColumnName = "addressId", nullable = true)
     private Address address;
 
 }
