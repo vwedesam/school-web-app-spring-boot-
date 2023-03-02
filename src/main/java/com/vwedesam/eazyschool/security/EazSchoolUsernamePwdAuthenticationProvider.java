@@ -35,7 +35,7 @@ public class EazSchoolUsernamePwdAuthenticationProvider implements Authenticatio
 
         if(auth != null && auth.getPersonId() > 0 && passwordEncoder.matches(password, auth.getPwd())){
             return new UsernamePasswordAuthenticationToken(
-                    auth.getName(), null, getGrantedAuthorities(auth.getRoles())
+                    auth.getEmail(), null, getGrantedAuthorities(auth.getRoles())
             );
         }else{
             throw new BadCredentialsException("Invalid credentials!");
