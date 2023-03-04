@@ -8,7 +8,6 @@ import com.vwedesam.eazyschool.repository.EazyClassRepository;
 import com.vwedesam.eazyschool.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +35,7 @@ public class AdminController {
     @RequestMapping(value = "/displayClasses")
     public ModelAndView displayClasses() {
         ModelAndView modelAndView = new ModelAndView("classes.html");
-        // Static Sorting
-        // List<Courses> courses = coursesRepository.findByOrderByNameDesc();
-        // Dynamic Sorting
-        List<EazyClass> eazyClasses = eazyClassRepository.findAll(Sort.by("name").descending());
+        List<EazyClass> eazyClasses = eazyClassRepository.findAll();
         modelAndView.addObject("eazyClasses", eazyClasses);
         modelAndView.addObject("eazyClass", new EazyClass());
         return modelAndView;

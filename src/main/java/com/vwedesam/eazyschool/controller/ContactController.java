@@ -4,13 +4,11 @@ import com.vwedesam.eazyschool.model.Contact;
 import com.vwedesam.eazyschool.service.ContactService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -52,46 +50,21 @@ public class ContactController {
         return "redirect:/contact";
     }
 
-    @RequestMapping(value = { "/displayMessages/page", "/displayMessages" })
-    public ModelAndView displayOpenMessages1(Model model,
-                                        @RequestParam(value = "sortField", defaultValue = "name") String sortField,
-                                        @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir){
+    @RequestMapping("/displayMessages")
+    public ModelAndView displayMessages(Model model){
+        List<Contact> contactMsgs = contactService.findMsgsWithStatus();
 
-        int pageNum = 1;
-        return contactService.displayOpenMessages(pageNum, sortField, sortDir);
-    }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("messages.html");
+        modelAndView.addObject("contactMsgs", contactMsgs);
 
-    @RequestMapping("/displayMessages/page/{pageNum}")
-    public ModelAndView displayOpenMessages(Model model,
-                                        @PathVariable(name = "pageNum") int pageNum,
-                                        @RequestParam(value = "sortField", defaultValue = "name") String sortField,
-                                        @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir){
-
-        return contactService.displayOpenMessages(pageNum, sortField, sortDir);
-    }
-
-    @RequestMapping(value = { "/displayClosedMessages/page", "/displayClosedMessages" })
-    public ModelAndView displayClosedMessages1(Model model,
-                                             @RequestParam(value = "sortField", defaultValue = "name") String sortField,
-                                             @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir){
-
-        int pageNum = 1;
-        return contactService.displayClosedMessages(pageNum, sortField, sortDir);
-    }
-
-    @RequestMapping("/displayClosedMessages/page/{pageNum}")
-    public ModelAndView displayClosedMessages(Model model,
-                                            @PathVariable(name = "pageNum") int pageNum,
-                                            @RequestParam(value = "sortField", defaultValue = "name") String sortField,
-                                            @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir){
-
-        return contactService.displayClosedMessages(pageNum, sortField, sortDir);
+        return modelAndView;
     }
 
     @RequestMapping("/closeMsg")
     public String updateMsgStatus(@RequestParam int id, Authentication authentication){
         contactService.updateMsgStatus(id);
-        return "redirect:/displayMessages/page";
+        return "redirect:/displayMessages";
     }
 
 }
