@@ -1,5 +1,6 @@
 package com.vwedesam.eazyschool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +17,13 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(name = "contact_msg")
+@NamedQueries({
+        @NamedQuery(name = "Contact.findOpenMsgs",
+                query = "SELECT c FROM Contact c WHERE c.status = :status"),
+        @NamedQuery(name = "Contact.updateMsgStatus",
+                query = "UPDATE Contact c SET c.status = ?1 WHERE c.contactId = ?2")
+})
+@JsonIgnoreProperties({"contactId"})
 public class Contact extends BaseEntity {
 
     /**
