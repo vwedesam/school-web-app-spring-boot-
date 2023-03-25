@@ -18,9 +18,11 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .csrf().ignoringAntMatchers("/public/**")
+                .ignoringAntMatchers("/api/**")
                 .and()
                 .authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
+                .mvcMatchers("/api/**").authenticated()
                 .mvcMatchers("/displayProfile").authenticated()
                 .mvcMatchers("/updateProfile").authenticated()
                 .mvcMatchers("/displayMessages").hasRole("ADMIN")
